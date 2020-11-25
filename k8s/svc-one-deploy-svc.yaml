@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-one
+  labels:
+    app: svc-one
+  namespace: app-apm-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-one
+  template:
+    metadata:
+      name: svc-one
+      labels:
+        app: svc-one
+    spec:
+      containers:
+      - name: app-apm
+        image: us-central1-docker.pkg.dev/dev-project-242716/apm-demo-repo/apm-demo
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SVC_NAME
+          value: "SERVICE-ONE"
+        - name: NAMESPACE
+          valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        - name: CONTAINER_NAME
+          value: "food-finder"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-apm-svc-one
+  namespace: app-apm-ns
+spec:
+  selector:
+    app: svc-one
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer

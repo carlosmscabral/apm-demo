@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+metadata:
+  name: apm-demo
+build:
+  artifacts:
+    - image: us-central1-docker.pkg.dev/dev-project-242716/apm-demo-repo/apm-demo
+  tagPolicy:
+    sha256: {}
+deploy:
+  kubectl:
+    manifests:
+      - k8s/svc-one-deploy-svc.yaml
+      - k8s/svc-two-deploy-svc.yaml
+      - k8s/svc-three-deploy-svc.yaml
