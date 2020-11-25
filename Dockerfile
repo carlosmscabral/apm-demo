@@ -7,6 +7,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/
+COPY source-context.json /app
 
 WORKDIR /app
 RUN easy_install https://github.com/GoogleCloudPlatform/cloud-debug-python/releases/download/v2.15/google_python_cloud_debugger-py3.8-linux-x86_64.egg
